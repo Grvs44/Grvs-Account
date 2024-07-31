@@ -1,0 +1,11 @@
+{% extends "registration/base.html" %}
+{% block title %}Profile{% endblock %}
+{% block body %}
+<h1>{{ request.user.username }}</h1>
+<p>First name: {{ request.user.first_name }}</p>
+<p>Last name: {{ request.user.last_name }}</p>
+<p>Email: {{ request.user.email }}</p>
+<p>Last login: {{ request.user.last_login }}</p>
+<p>Joined: {{ request.user.date_joined }}</p>
+<p><form method="post" action="{% url 'logout_login'  %}">{% csrf_token %}<input type="submit" value="Logout"/></form></p>
+{% endblock %}
