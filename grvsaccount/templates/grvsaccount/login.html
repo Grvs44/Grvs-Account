@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>Login</title>
+    <script>
+      function getCookie(key) {
+        if (document.cookie != "") {
+          const cookies = decodeURI(document.cookie).split(";");
+          for (let cookie of cookies) {
+            if (cookie.split("=")[0] == key) {
+              return cookie.split("=")[1];
+            }
+          }
+        }
+        return null;
+      }
+      async function login() {
+        const username = prompt("Enter username");
+        const password = prompt("Enter password");
+        const request = await fetch("/accounts/api/login/", {
+          method: "post",
+          body: JSON.stringify({ username, password }),
+          headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+            "Content-Type": "application/json;charset=utf-8",
+          },
+        });
+        if (request.status === 204) alert("Logged in as " + username);
+        else {
+          const response = await request.json();
+          alert("Error: " + response.detail);
+        }
+      }
+      async function logout() {
+        const request = await fetch("/accounts/api/logout/", {
+          method: "post",
+          headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+        });
+        if (request.status === 204) alert("Logged out");
+        else {
+          const response = await request.json();
+          alert("Error: " + response.detail);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="login()">Login</button>
+    <button onclick="logout()">Logout</button>
+  </body>
+</html>
